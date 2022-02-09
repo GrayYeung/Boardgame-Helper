@@ -1,0 +1,7 @@
+query getWordleSuggestions($input: WordleOptionInput) {
+  wordleSuggestions(input: $input)
+}
+
+query getWordleQuizWord {
+  wordleQuizWord
+}

@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "env": {
+    "NODE_ENV": "production",
+    "APP_VERSION": "0.0.1",
+    "PORT": "3000",
+    "GRAPHQL_PORT": "5000",
+    "API_URL": "http://localhost:5000",
+    "API_PATH": "/graphql",
+    "WEB_PROXY": "/graphql"
+  },
+  "github": {
+    "silent": false
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "PORT": "3000",
+      "GRAPHQL_PORT": "5000",
+      "API_URL": "http://localhost:5000",
+      "API_PATH": "/graphql",
+      "WEB_PROXY": "/graphql"
+    }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "nuxt.config.js",
+      "use": "@nuxtjs/vercel-builder",
+      "config": {
+        "serverFiles": [
+          "server-middleware/**"
+        ]
+      }
+    }
+  ]
+}

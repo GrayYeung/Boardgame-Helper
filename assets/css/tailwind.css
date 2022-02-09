@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*text color*/
+:root {
+  --white-color: white;
+  --snow-color: #fffafa;
+  --yellow-color: #ffcb00;
+  --beige-color-400: #d6c9b1;
+  --beige-color-300: #ded4c0;
+  --beige-color-200: #e6dfd0;
+  --beige-color-100: #eee9e0;
+  --gold-color: #bf9b30;
+  --silver-color: #979797;
+  --grey-color-800: #171717;
+  --grey-color-700: #242424;
+  --grey-color-600: #2b2b2b;
+  --grey-color-300: #454545;
+  --grey-color-250: #6f6f6f;
+  --grey-color-200: #777777;
+  --grey-color-100: #c3c3c3;
+  --orange-color: orange;
+  --error-color: #ff0303;
+  --disable-color: #e7e7e7;
+}
+
+/*font style */
+@layer utilities {
+  .font-stretch-normal {
+    font-stretch: normal;
+    font-style: normal;
+  }
+
+  .font-normal-set {
+    @apply font-normal tracking-normal font-stretch-normal;
+  }
+  .font-bold-set {
+    @apply font-bold tracking-normal font-stretch-normal;
+  }
+  .font-light-set {
+    @apply font-light tracking-normal font-stretch-normal;
+  }
+  .font-black-set {
+    @apply font-black tracking-normal font-stretch-normal;
+  }
+  .font-0spacing-set {
+    @apply font-normal tracking-0 font-stretch-normal;
+  }
+
+  /* skeleton */
+  .bg-skeleton-dark {
+    animation: bg-pulse-dark 1s infinite;
+  }
+  .bg-skeleton-light {
+    animation: bg-pulse-light 1s infinite;
+  }
+}
+
+/* transition */
+.transition-all-100-ease-0 {
+  transition: all 100ms ease 0ms;
+}
+.transition-all-0-linear-0 {
+  transition: all 0ms linear 0ms;
+}
+
+/* skeleton */
+@keyframes bg-pulse-dark {
+  0%,
+  100% {
+    background-color: var(--grey-color-700);
+  }
+  50% {
+    background-color: var(--grey-color-800);
+  }
+}
+@keyframes bg-pulse-light {
+  0%,
+  100% {
+    background-color: #ddd;
+  }
+  50% {
+    background-color: #d0d0d0;
+  }
+}
+
+/* box shadow */
+@layer utilities {
+  .shadow-0_25-white {
+    box-shadow: 0 0 0 0.0625rem white;
+  }
+  .shadow-0_25-grey-800 {
+    box-shadow: 0 0 0 0.0625rem var(--grey-color-800);
+  }
+  .shadow-0_5-white {
+    box-shadow: 0 0 0 0.125rem white;
+  }
+  .shadow-0_5-grey-800 {
+    box-shadow: 0 0 0 0.125rem var(--grey-color-800);
+  }
+}
+
+/*component */
+.divider {
+  @apply h-0 bg-silver border-solid border-[0.03rem] border-silver
+}
+.semi-divider {
+  @apply h-[0.03rem] bg-silver
+}
+.page-container {
+  /* handle status bar in mobile view */
+  height: 100vh;
+  max-height: -webkit-fill-available;
+  max-height: -moz-available;
+  max-height: stretch;
+  overflow: hidden;
+}
+.child-page-container {
+  @apply h-screen min-h-full w-full min-w-inherit
+}
+
+/* Fix default browser behaviour */
+@layer utilities {
+  .no-text-select {
+    /*disable text selection*/
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  }
+
+  .no-outline {
+    /* remove browser chrome */
+    -webkit-appearance: none; /* chrome, safari */
+    -moz-appearance: none; /* mozilla */
+    appearance: none;
+    outline: none;
+  }
+
+  .no-highlight {
+    /* remove the blue highlight */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .input-mask {
+    /*mask input*/
+    text-security: disc;
+    -webkit-text-security: disc;
+    -moz-text-security: disc;
+  }
+
+  .clickable {
+    @apply cursor-pointer no-highlight;
+  }
+}
+
+/* base */
+@layer base {
+  body {
+    font-family: 'Lato';
+  }
+
+  main {
+    overflow: auto;
+  }
+
+  .scrollContainer::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  button {
+    @apply no-highlight;
+  }
+
+  p, button, span, div, th, td, caption {
+    @apply no-text-select;
+  }
+}

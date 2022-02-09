@@ -1,0 +1,29 @@
+#type
+input Char {
+  char: String!
+  status: WordStatus!
+}
+
+input Word {
+  word: [Char!]!
+}
+
+enum WordStatus {
+  GREEN,
+  YELLOW,
+  GREY
+}
+
+#Resolver
+extend type Query {
+  wordleSuggestions(input: WordleOptionInput): [String]
+}
+
+extend type Query {
+  wordleQuizWord: String!
+}
+
+input WordleOptionInput {
+  words: [Word!]!
+}
+
