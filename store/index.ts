@@ -35,15 +35,17 @@ export const getters: GetterTree<RootState, RootState> = {
 }
 
 export const mutations: MutationTree<RootState> = {
-  // Error
+  /*Error*/
   setErrorMsg: (state: RootState, payload: string | null) => {
     state.errorMsg = payload
   },
-  // Menu
+
+  /*Menu*/
   setMenuOpen: (state: RootState, payload: boolean) => {
     state.isMenuOpen = payload
   },
-  // Color Theme
+
+  /*Color Theme*/
   setColorTheme: (state: RootState, payload: string) => {
     state.isDarkMode = payload === 'dark'
   },
@@ -55,7 +57,15 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-  // Wordle
+  /*Menu*/
+  openMenu: (context: RootContext) => {
+    context.commit('setMenuOpen', true)
+  },
+  closeMenu: (context: RootContext) => {
+    context.commit('setMenuOpen', false)
+  },
+
+  /*Wordle*/
   async fetchWordleSuggestions(
     context: RootContext,
     payload: QueryWordleSuggestionsArgs,
