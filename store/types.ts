@@ -12,6 +12,7 @@ export interface RootState {
 
 export interface SettingObj {
   [key: string]: any //FIXME: dont use any.
+  homePage: string
   plugins: Plugin[]
 }
 
@@ -22,6 +23,7 @@ export type Plugin = {
 }
 
 export const defaultSettingObj: SettingObj = {
+  homePage: 'index-setting',
   plugins: pluginList.map((plugin: MenuItem) => {
     return { name: plugin.name, title: plugin.title, isActive: true }
   }),
