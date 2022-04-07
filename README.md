@@ -9,3 +9,6 @@ The purpose of this website is to make the process of playing actual boardgames 
 ### Included game list:
 
 - [x] Wordle
+- [ ] 亞瑟傳奇
+- [ ] 熊熊公園
+- [ ] 拉斯維加斯
