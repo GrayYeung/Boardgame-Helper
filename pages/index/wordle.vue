@@ -3,10 +3,23 @@
     <Header class="flex-initial" title="Wordle" />
 
     <main class="flex-auto mt-20 pb-20 px-4">
+      <!-- config -->
+      <ToggleDisplay title="Config" class="my-4 text-silver">
+        <div class="flex items-center justify-between py-1 ml-5 text-white">
+          <h3 class="text-1 leading-none">Quiz Mode</h3>
+          <BooleanSwitch :value="enableQuiz" @click="enableQuiz = !enableQuiz" />
+        </div>
+        <div class="flex items-center justify-between ml-5 text-white">
+          <h3 class="text-1 leading-none">Show Hints</h3>
+          <BooleanSwitch :value="enableHint" @click="enableHint = !enableHint" />
+        </div>
+      </ToggleDisplay>
+
       <!-- quiz -->
-      <section class="my-4">
+      <section class="my-4" v-if="enableQuiz">
+        <SemiDivider class="my-4" />
         <div class="flex my-2">
-          <h2 class="text-gold mr-2"><strong>Quiz Mode:</strong></h2>
+          <h2 class="text-gold mr-2"><strong>Quiz Section:</strong></h2>
           <transition appear name="fade-in-out">
             <div v-if="quizAnswer.length" class="flex">
               <div
@@ -41,10 +54,9 @@
         </div>
       </section>
 
-      <SemiDivider class="my-4" />
-
       <!-- inputted words -->
       <section class="mt-4">
+        <SemiDivider class="my-4" />
         <h2 v-if="!hasInput">Try 'Show' or input words</h2>
         <div v-for="(word, wordIndex) in inputtedWordObj" :key="wordIndex" class="flex my-2">
           <p class="min-w-7 mr-2">{{ getOrdinalSuffixOf(wordIndex + 1) }}</p>
@@ -85,6 +97,7 @@
           class="bg-grey-100 dark:bg-[#888888] rounded-md mr-4 h-10 grow min-w-0 pl-4 no-outline nt:focus:shadow-0_5-grey-800 nt:focus:dark:shadow-0_5-white ta:active:shadow-0_5-grey-800 ta:active:dark:shadow-0_5-white"
         />
         <TextButton
+          v-if="enableHint"
           class="mr-2 nt:hover:bg-gold"
           title="Hints"
           :handle-click="handleSubmit"
@@ -93,10 +106,9 @@
         <TextButton class="mr-2 nt:hover:bg-gold" title="Clear" :handle-click="handleClear" />
       </section>
 
-      <SemiDivider class="my-4" />
-
       <!-- suggestions -->
-      <section v-if="!isInit">
+      <section v-if="!isInit && enableHint">
+        <SemiDivider class="my-4" />
         <h2 v-if="!hasSuggestions">No suggestions</h2>
         <div v-else>
           <h2 class="text-gold mb-2">
@@ -151,16 +163,22 @@ import TextButton from '~/components/buttons/TextButton.vue'
 import { cancelIcon } from '~/assets/icons'
 import SVGBase from '~/components/SVGBase.vue'
 import { getOrdinalSuffixOf } from '~/components/helper/string'
+import ToggleDisplay from '~/components/ToggleDisplay.vue'
+import BooleanSwitch from '~/components/input/BooleanSwitch.vue'
 
 export default defineComponent({
   name: 'Wordle',
 
-  components: { SemiDivider, TextButton, SVGBase },
+  components: { ToggleDisplay, BooleanSwitch, SemiDivider, TextButton, SVGBase },
   // layout: '',
   props: {},
 
   setup(props, { emit }) {
     const store = useStore<RootState>()
+
+    // config
+    const enableQuiz = ref<boolean>(true)
+    const enableHint = ref<boolean>(true)
 
     // init
     const isInit = ref<boolean>(true)
@@ -348,6 +366,8 @@ export default defineComponent({
 
     return {
       // display
+      enableQuiz,
+      enableHint,
       isInit,
       cancelIcon,
       // quiz
