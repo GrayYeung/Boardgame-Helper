@@ -1,4 +1,4 @@
-import { defaultSettingObj, RootState } from '~/store/types'
+import { defaultSettingObj, RootState, SettingObj } from '~/store/types'
 import {
   Example,
   GetWordleQuizWordDocument,
@@ -48,6 +48,11 @@ export const mutations: MutationTree<RootState> = {
   /*Color Theme*/
   setColorTheme: (state: RootState, payload: string) => {
     state.isDarkMode = payload === 'dark'
+  },
+
+  /*Setting*/
+  setSettingObj: (state: RootState, payload: SettingObj) => {
+    state.settingObj = payload
   },
 
   //

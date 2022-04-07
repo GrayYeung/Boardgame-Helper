@@ -3,27 +3,53 @@
     <Header class="flex-initial" title="設定" />
 
     <main class="flex-auto mt-20 pb-20 px-4">
-      <section class="mt-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-1 leading-none">顏色模式</h2>
-          <DropDownWrap>
-            <select
-              v-model="$colorMode.preference"
-              class="text-gold text-1 leading-none clickable no-outline bg-transparent"
-              @change="handleChange($event)"
-            >
-              <!--              <option value="system">系統</option>-->
-              <option value="light">淺色</option>
-              <option value="dark">深色</option>
-            </select>
-          </DropDownWrap>
-        </div>
-      </section>
+      <client-only>
+        <section class="mt-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-1 leading-none">顏色模式</h2>
+            <DropDownWrap>
+              <select
+                v-model="$colorMode.preference"
+                class="text-gold text-1 leading-none clickable no-outline bg-transparent"
+                @change="handleChange($event)"
+              >
+                <!--              <option value="system">系統</option>-->
+                <option value="light">淺色</option>
+                <option value="dark">深色</option>
+              </select>
+            </DropDownWrap>
+          </div>
+        </section>
 
-      <SemiDivider class="my-4" />
+        <SemiDivider class="my-4" />
 
-      <section>
-        <client-only>
+        <section class="mt-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-1 leading-none">首頁</h2>
+            <DropDownWrap>
+              <select
+                v-model="homePageRef"
+                class="text-gold text-1 leading-none text-right clickable no-outline bg-transparent"
+                @change="handleUpdateHomePage($event)"
+              >
+                <option
+                  v-for="plugin in settingObj.plugins"
+                  :key="plugin.name"
+                  :value="plugin.name"
+                >
+                  {{ plugin.title }}
+                </option>
+                <option v-for="menu in menuList" :key="menu.name" :value="menu.name">
+                  {{ menu.title }}
+                </option>
+              </select>
+            </DropDownWrap>
+          </div>
+        </section>
+
+        <SemiDivider class="my-4" />
+
+        <section>
           <h2 class="text-1 leading-none mb-2">插件開關</h2>
           <div
             v-for="plugin in settingObj.plugins"
@@ -36,8 +62,8 @@
               @click="handleUpdatePlugin($event, plugin.name)"
             />
           </div>
-        </client-only>
-      </section>
+        </section>
+      </client-only>
     </main>
   </div>
 </template>
@@ -49,6 +75,7 @@ import BooleanSwitch from '~/components/input/BooleanSwitch.vue'
 import DropDownWrap from '~/components/input/DropDownWrap.vue'
 import Header from '~/components/Header.vue'
 import SVGBase from '~/components/SVGBase.vue'
+import { menuList } from '~/components/helper/MenuItem'
 
 export default defineComponent({
   name: 'Setting',
@@ -63,6 +90,7 @@ export default defineComponent({
     // display
     const storeSettingObj = computed(() => store.state.settingObj)
     const settingObj = reactive(storeSettingObj)
+    const homePageRef = computed(() => store.state.settingObj.homePage)
 
     // update setting
     const getUpdatedObj = (key: string, val: any): SettingObj => {
@@ -77,6 +105,13 @@ export default defineComponent({
     }
     const handleUpdateSwitch = (e: boolean, key: string) => {
       const newObj = getUpdatedObj(key, e)
+      store.commit('setSettingObj', newObj)
+    }
+
+    // homePage
+    const handleUpdateHomePage = (e: Event) => {
+      const target = e.target as HTMLSelectElement
+      const newObj = getUpdatedObj('homePage', target.value)
       store.commit('setSettingObj', newObj)
     }
 
@@ -98,9 +133,13 @@ export default defineComponent({
 
     return {
       settingObj,
+      menuList,
       handleUpdateSwitch,
       // color theme
       handleChange,
+      // homePage
+      homePageRef,
+      handleUpdateHomePage,
       // plugin
       handleUpdatePlugin,
     }

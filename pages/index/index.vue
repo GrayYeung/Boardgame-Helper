@@ -3,7 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useRouter } from '@nuxtjs/composition-api'
+import { computed, defineComponent, unref, useRouter, useStore } from '@nuxtjs/composition-api'
+import { RootState } from '~/store/types'
 
 export default defineComponent({
   name: 'Index',
@@ -14,8 +15,21 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const router = useRouter()
-    const redirectToHome = () => router.push({ name: 'index-setting' })
-    redirectToHome()
+    const store = useStore<RootState>()
+
+    if (process.client) {
+      // FIXME: workaround
+      setTimeout(() => {
+        // check settingObj
+        const homePage = computed(() => store.state.settingObj.homePage)
+        const plugins = computed(() => store.state.settingObj.plugins)
+        const pushPage = unref(plugins).find(
+          plugin => plugin.name === homePage.value && plugin.isActive,
+        )
+        const redirectToHome = () => router.push({ name: pushPage?.name ?? 'index-setting' })
+        redirectToHome()
+      }, 100)
+    }
 
     return {}
   },
