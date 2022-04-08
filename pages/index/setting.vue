@@ -28,8 +28,9 @@
             <h2 class="text-1 leading-none">首頁</h2>
             <DropDownWrap>
               <select
+                style="direction: rtl"
                 v-model="homePageRef"
-                class="text-gold text-1 leading-none text-right clickable no-outline bg-transparent"
+                class="text-gold text-1 leading-none clickable no-outline bg-transparent"
                 @change="handleUpdateHomePage($event)"
               >
                 <option
