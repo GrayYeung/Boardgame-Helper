@@ -42,7 +42,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { RootState } from '~/store/types'
 import SVGBase from '~/components/SVGBase.vue'
-import { menuList, pluginList } from '~/components/model/MenuItem'
+import { MenuItem, menuList, pluginList } from '~/components/model/MenuItem'
 
 export default defineComponent({
   name: 'SideMenu',
@@ -71,10 +71,10 @@ export default defineComponent({
     }
     const router = useRouter()
     const normalizedPluginList = computed(() =>
-      pluginList.flatMap(plugin => {
+      pluginList.flatMap((plugin: MenuItem) => {
         const isActive =
           unref(storeSettingObj)?.plugins.find(pluginSetting => pluginSetting.name === plugin.name)
-            ?.isActive ?? false
+            ?.isActive ?? true
         return isActive ? plugin : []
       }),
     )

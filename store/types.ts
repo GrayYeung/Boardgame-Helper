@@ -8,6 +8,7 @@ export interface RootState {
   isDarkMode: boolean | null
   errorMsg: string | null
   settingObj: SettingObj
+  gameSettings: GameSetting
 }
 
 export interface SettingObj {
@@ -33,4 +34,19 @@ export interface AnotherState {
   [x: string]: any
 
   anything: string
+}
+
+export type GameType = 'quest'
+
+export interface GameSetting {
+  quest: any
+}
+
+export const defaultGameSettings: GameSetting = {
+  quest: null,
+}
+
+export interface UpdateGameSettingObj {
+  key: GameType
+  value: any
 }

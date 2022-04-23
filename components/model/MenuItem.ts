@@ -23,4 +23,10 @@ export const pluginList: MenuItem[] = [
     img: packageIcon,
     type: 'plugin',
   },
+  {
+    title: '亞瑟傳奇',
+    name: 'index-quest',
+    img: packageIcon,
+    type: 'plugin',
+  },
 ]

@@ -55,7 +55,7 @@
           <div
             v-for="plugin in settingObj.plugins"
             :key="plugin.name"
-            class="flex items-center justify-between"
+            class="flex items-center justify-between my-2"
           >
             <h3 class="text-1 leading-none">{{ plugin.title }}</h3>
             <BooleanSwitch
@@ -70,13 +70,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, useStore } from '@nuxtjs/composition-api'
+import { computed, defineComponent, reactive, unref, useStore } from '@nuxtjs/composition-api'
 import { Plugin, RootState, SettingObj } from '~/store/types'
 import BooleanSwitch from '~/components/input/BooleanSwitch.vue'
 import DropDownWrap from '~/components/input/DropDownWrap.vue'
 import Header from '~/components/Header.vue'
 import SVGBase from '~/components/SVGBase.vue'
-import { menuList } from '~/components/model/MenuItem'
+import { MenuItem, menuList, pluginList } from '~/components/model/MenuItem'
+import { performClientTimeoutFunction } from '~/components/helper/performClientTimeoutFunction'
 
 export default defineComponent({
   name: 'Setting',
@@ -88,12 +89,32 @@ export default defineComponent({
   setup(props, { emit }) {
     const store = useStore<RootState>()
 
-    // display
+    /*display*/
     const storeSettingObj = computed(() => store.state.settingObj)
     const settingObj = reactive(storeSettingObj)
     const homePageRef = computed(() => store.state.settingObj.homePage)
 
-    // update setting
+    const combinePluginWithSettingObj = () => {
+      const isFullySet = unref(storeSettingObj).plugins.length === pluginList.length
+      if (!isFullySet) {
+        const settingObjPluginMap = new Map(
+          unref(storeSettingObj).plugins.map((plugin: Plugin) => [plugin.name, plugin]),
+        )
+        const fullPluginList = pluginList.map(
+          (plugin: MenuItem) =>
+            settingObjPluginMap.get(plugin.name) ?? {
+              name: plugin.name,
+              title: plugin.title,
+              isActive: true,
+            },
+        )
+        const newObj = getUpdatedObj('plugins', fullPluginList)
+        store.commit('setSettingObj', newObj)
+      }
+    }
+    performClientTimeoutFunction(combinePluginWithSettingObj)
+
+    /*update setting*/
     const getUpdatedObj = (key: string, val: any): SettingObj => {
       const newObj = { ...storeSettingObj.value }
       newObj[key] = val
@@ -109,14 +130,14 @@ export default defineComponent({
       store.commit('setSettingObj', newObj)
     }
 
-    // homePage
+    /*homePage*/
     const handleUpdateHomePage = (e: Event) => {
       const target = e.target as HTMLSelectElement
       const newObj = getUpdatedObj('homePage', target.value)
       store.commit('setSettingObj', newObj)
     }
 
-    // plugin
+    /*plugin*/
     const handleUpdatePlugin = (e: boolean, name: string) => {
       const mapFun = (item: Plugin) => {
         return item.name === name ? { ...item, isActive: e } : item
@@ -125,7 +146,7 @@ export default defineComponent({
       store.commit('setSettingObj', newObj)
     }
 
-    // color theme
+    /*color theme*/
     const handleChange = (e: Event) => {
       const target = e.target as HTMLSelectElement
       const newTheme = target.value
