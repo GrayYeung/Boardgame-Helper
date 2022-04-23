@@ -76,7 +76,7 @@ import BooleanSwitch from '~/components/input/BooleanSwitch.vue'
 import DropDownWrap from '~/components/input/DropDownWrap.vue'
 import Header from '~/components/Header.vue'
 import SVGBase from '~/components/SVGBase.vue'
-import { menuList } from '~/components/helper/MenuItem'
+import { menuList } from '~/components/model/MenuItem'
 
 export default defineComponent({
   name: 'Setting',

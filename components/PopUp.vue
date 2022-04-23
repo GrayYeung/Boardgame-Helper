@@ -36,7 +36,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, PropType, Ref } from '@nuxtjs/composition-api'
 import TextButton from '~/components/buttons/TextButton.vue'
-import { Button } from '~/components/helper/button'
+import { Button } from '~/components/model/Button'
 
 export default defineComponent({
   name: 'PopUp',

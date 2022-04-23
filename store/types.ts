@@ -1,5 +1,5 @@
 import { Example } from '~/gen/composition'
-import { MenuItem, pluginList } from '~/components/helper/MenuItem'
+import { MenuItem, pluginList } from '~/components/model/MenuItem'
 
 export interface RootState {
   examples: Example[]

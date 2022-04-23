@@ -42,7 +42,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { RootState } from '~/store/types'
 import SVGBase from '~/components/SVGBase.vue'
-import { menuList, pluginList } from '~/components/helper/MenuItem'
+import { menuList, pluginList } from '~/components/model/MenuItem'
 
 export default defineComponent({
   name: 'SideMenu',

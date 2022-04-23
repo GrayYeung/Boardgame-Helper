@@ -1,4 +1,4 @@
-import { graphIcon, historyIcon, homeIcon, packageIcon, settingIcon } from '~/assets/icons'
+import { packageIcon, settingIcon } from '~/assets/icons'
 
 export interface MenuItem {
   title: string
