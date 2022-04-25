@@ -5,11 +5,11 @@
     <main class="flex-auto mt-20 pb-20 px-4">
       <!-- config -->
       <ToggleDisplay title="Config" class="my-4 text-silver">
-        <div class="flex items-center justify-between py-1 ml-5 text-white">
+        <div class="flex items-center justify-between py-1 ml-5 text-black dark:text-white">
           <h3 class="text-1 leading-none">Quiz Mode</h3>
           <BooleanSwitch :value="enableQuiz" @click="enableQuiz = !enableQuiz" />
         </div>
-        <div class="flex items-center justify-between ml-5 text-white">
+        <div class="flex items-center justify-between ml-5 text-black dark:text-white">
           <h3 class="text-1 leading-none">Show Hints</h3>
           <BooleanSwitch :value="enableHint" @click="enableHint = !enableHint" />
         </div>
