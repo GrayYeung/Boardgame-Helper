@@ -5,7 +5,7 @@
     <main class="flex-auto mt-20 pb-20 px-4">
       <!-- config -->
       <ToggleDisplay title="Config" class="my-4 text-silver">
-        <div class="flex items-center justify-between py-1 ml-5 text-black dark:text-white">
+        <div class="flex items-center justify-between pt-2 pb-1 ml-5 text-black dark:text-white">
           <h3 class="text-1 leading-none">Quiz Mode</h3>
           <BooleanSwitch :value="enableQuiz" @click="enableQuiz = !enableQuiz" />
         </div>
