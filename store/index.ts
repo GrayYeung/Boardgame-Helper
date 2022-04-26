@@ -1,4 +1,11 @@
-import { defaultSettingObj, RootState, SettingObj } from '~/store/types'
+import {
+  defaultGameSettings,
+  defaultSettingObj,
+  GameType,
+  RootState,
+  SettingObj,
+  UpdateGameSettingObj,
+} from '~/store/types'
 import {
   Example,
   GetWordleQuizWordDocument,
@@ -18,13 +25,14 @@ export const state = (): RootState => ({
   isDarkMode: null,
   errorMsg: null,
   settingObj: defaultSettingObj,
+  gameSettings: defaultGameSettings,
 })
 
 export const getters: GetterTree<RootState, RootState> = {
+  //
   getAllKeywords: (state: RootState): (string | null | undefined)[] => {
     return state.examples.flatMap((e: Example) => e.keywords)
   },
-
   getAllKeywordsByRole:
     (state: RootState) =>
     (role: Role): (string | null | undefined)[] => {
@@ -32,6 +40,11 @@ export const getters: GetterTree<RootState, RootState> = {
         return e.role === role ? e.keywords : []
       })
     },
+
+  /*Game Settings*/
+  getGameSetting: (state: RootState) => (key: GameType) => {
+    return state.gameSettings[key]
+  },
 }
 
 export const mutations: MutationTree<RootState> = {
@@ -53,6 +66,11 @@ export const mutations: MutationTree<RootState> = {
   /*Setting*/
   setSettingObj: (state: RootState, payload: SettingObj) => {
     state.settingObj = payload
+  },
+
+  /*Game Settings*/
+  setGameSettings: (state: RootState, payload: UpdateGameSettingObj) => {
+    state.gameSettings[payload.key] = payload.value
   },
 
   //

@@ -1,4 +1,4 @@
-import { graphIcon, historyIcon, homeIcon, packageIcon, settingIcon } from '~/assets/icons'
+import { packageIcon, settingIcon } from '~/assets/icons'
 
 export interface MenuItem {
   title: string
@@ -20,6 +20,12 @@ export const pluginList: MenuItem[] = [
   {
     title: 'Wordle',
     name: 'index-wordle',
+    img: packageIcon,
+    type: 'plugin',
+  },
+  {
+    title: '亞瑟傳奇',
+    name: 'index-quest',
     img: packageIcon,
     type: 'plugin',
   },

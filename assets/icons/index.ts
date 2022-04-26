@@ -15,6 +15,14 @@ import lockIcon from './icon-lock.svg?raw'
 import scrollIcon from './icon-scroll.svg?raw'
 import boxIcon from './icon-box.svg?raw'
 import packageIcon from './icon-package.svg?raw'
+import plusIcon from './icon-plus.svg?raw'
+import minusIcon from './icon-minus.svg?raw'
+import crownIcon from './icon-color-crown.svg?raw'
+import fireIcon from './icon-color-fire.svg?raw'
+import shieldIcon from './icon-color-shield.svg?raw'
+import gemIcon from './icon-color-gem.svg?raw'
+import evilIcon from './icon-color-evil.svg?raw'
+import smileIcon from './icon-color-smile.svg?raw'
 
 export {
   viewIcon,
@@ -34,4 +42,13 @@ export {
   scrollIcon,
   boxIcon,
   packageIcon,
+  plusIcon,
+  minusIcon,
+  // color
+  crownIcon,
+  fireIcon,
+  shieldIcon,
+  gemIcon,
+  evilIcon,
+  smileIcon,
 }

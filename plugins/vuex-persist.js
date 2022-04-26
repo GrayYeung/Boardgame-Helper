@@ -11,6 +11,7 @@ export default ({ store }) => {
       reducer: state => ({
         examples: state.examples,
         settingObj: state.settingObj,
+        gameSettings: state.gameSettings,
       }),
     }).plugin(store)
   })
