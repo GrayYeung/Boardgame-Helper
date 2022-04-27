@@ -17,6 +17,9 @@ import boxIcon from './icon-box.svg?raw'
 import packageIcon from './icon-package.svg?raw'
 import plusIcon from './icon-plus.svg?raw'
 import minusIcon from './icon-minus.svg?raw'
+import rotateAnticlockwiseIcon from './icon-rotate-anticlockwise.svg?raw'
+import rotateClockwiseIcon from './icon-rotate-clockwise.svg?raw'
+//
 import crownIcon from './icon-color-crown.svg?raw'
 import fireIcon from './icon-color-fire.svg?raw'
 import shieldIcon from './icon-color-shield.svg?raw'
@@ -44,6 +47,8 @@ export {
   packageIcon,
   plusIcon,
   minusIcon,
+  rotateAnticlockwiseIcon,
+  rotateClockwiseIcon,
   // color
   crownIcon,
   fireIcon,
