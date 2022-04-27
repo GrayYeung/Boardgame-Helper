@@ -37,166 +37,182 @@
 
         <SemiDivider class="my-4" />
 
-        <TextButton class="my-4 nt:hover:bg-gold" title="重設" :handle-click="handleClickReset" />
+        <!-- buttons -->
+        <section class="my-4 flex">
+          <TextButton class="mr-2 nt:hover:bg-gold" title="重設" :handle-click="handleClickReset" />
+          <TextButton
+            class="nt:hover:bg-gold"
+            :title="isRotate ? '復原' : '旋轉'"
+            :icon="isRotate ? rotateAnticlockwiseIcon : rotateClockwiseIcon"
+            :handle-click="() => (isRotate = !isRotate)"
+          />
+        </section>
 
         <!-- game board -->
-        <table class="">
-          <caption class="text-left mb-1 pl-1">進度：</caption>
+        <section :class="{ relative: isRotate }">
+          <table :class="{ rotate: isRotate }">
+            <caption class="text-left mb-1 pl-1">進度：</caption>
 
-          <thead>
-            <tr class="text-1 leading-none font-bold-set text-center">
-              <th class="border-r-0.5 border-b-0.5 border-opacity-40"></th>
-              <th
-                v-for="(player, playerIndex) in players"
-                :key="playerIndex"
-                class="pb-2 text-gold border-r-0.25 border-l-0.25 border-b-0.5 border-opacity-40"
-              >
-                <section class="flex items-center justify-between max-w-32">
-                  <div class="flex-1 min-w-5" />
-                  <input
-                    v-if="onEditPlayers.includes(playerIndex)"
-                    class="max-w-20 h-4 bg-transparent no-outline text-center"
-                    v-model="players[playerIndex]"
-                  />
-                  <p v-else class="flex-initial break-all">
-                    {{ player }}
-                  </p>
-                  <div class="flex-1">
-                    <SVGBase
-                      :svg-content="onEditPlayers.includes(playerIndex) ? tickIcon : editBtn"
-                      class="mx-0.5 w-4 clickable fill-silver stroke-2 stroke-silver"
-                      :class="{
-                        'stroke-[2rem] stroke-silver': onEditPlayers.includes(playerIndex),
-                      }"
-                      @click.native="
-                        onEditPlayers.includes(playerIndex)
-                          ? handleClickConfirmEdit(playerIndex)
-                          : handleClickEdit(playerIndex)
-                      "
+            <thead>
+              <tr class="text-1 leading-none font-bold-set text-center">
+                <th class="border-r-0.5 border-b-0.5 border-opacity-40"></th>
+                <th
+                  v-for="(player, playerIndex) in players"
+                  :key="playerIndex"
+                  class="pb-2 text-gold border-r-0.25 border-l-0.25 border-b-0.5 border-opacity-40"
+                >
+                  <section class="flex items-center justify-between max-w-32">
+                    <div class="flex-1 min-w-5" />
+                    <input
+                      v-if="onEditPlayers.includes(playerIndex)"
+                      class="max-w-20 h-4 bg-transparent no-outline text-center"
+                      v-model="players[playerIndex]"
                     />
-                  </div>
-                </section>
-              </th>
-              <th class="pb-2 px-2 text-gold border-l-0.5 border-b-0.5 border-opacity-40">結果</th>
-            </tr>
-          </thead>
+                    <p v-else class="flex-initial break-all">
+                      {{ player }}
+                    </p>
+                    <div class="flex-1">
+                      <SVGBase
+                        :svg-content="onEditPlayers.includes(playerIndex) ? tickIcon : editBtn"
+                        class="mx-0.5 w-4 clickable fill-silver stroke-2 stroke-silver"
+                        :class="{
+                          'stroke-[2rem] stroke-silver': onEditPlayers.includes(playerIndex),
+                        }"
+                        @click.native="
+                          onEditPlayers.includes(playerIndex)
+                            ? handleClickConfirmEdit(playerIndex)
+                            : handleClickEdit(playerIndex)
+                        "
+                      />
+                    </div>
+                  </section>
+                </th>
+                <th class="pb-2 px-2 text-gold border-l-0.5 border-b-0.5 border-opacity-40">
+                  結果
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr v-for="(round, roundIndex) in gameState" :key="roundIndex">
-              <td
-                class="px-2 border-t-0.25 border-r-0.5 border-opacity-40 text-silver"
-                :class="{
-                  'border-b-0.25': roundIndex !== gameState.length - 1,
-                  '!text-yellow': determineRoundResult(roundIndex) === 'goodWins',
-                  '!text-red-700': determineRoundResult(roundIndex) === 'badWins',
-                }"
-              >
-                R{{ roundIndex + 1 }}
-              </td>
-              <th
-                v-for="(player, playerIndex) in round"
-                :key="roundIndex + playerIndex"
-                class="border-opacity-40"
-                :class="[
-                  roundIndex === gameState.length - 1
-                    ? 'border-t-0.25 border-l-0.25 border-r-0.25'
-                    : 'border-0.25',
-                ]"
-              >
-                <div class="flex">
-                  <SVGBase
-                    :svg-content="crownIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.leader }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'leader')"
-                  />
-                  <SVGBase
-                    :svg-content="shieldIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.mission }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'mission')"
-                  />
-                  <SVGBase
-                    :svg-content="fireIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.fire }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'fire')"
-                  />
-                </div>
-                <div class="flex" v-if="gamePlayOption.enableWaterRounds.includes(roundIndex + 1)">
-                  <SVGBase
-                    :svg-content="gemIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.water }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'water')"
-                  />
-                  <SVGBase
-                    :svg-content="smileIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.waterV }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'waterV')"
-                  />
-                  <SVGBase
-                    :svg-content="evilIcon"
-                    class="w-8 mx-1 my-1 clickable"
-                    :class="{ 'opacity-20': !player.waterX }"
-                    @click.native="handleClickSymbol(roundIndex, playerIndex, 'waterX')"
-                  />
-                </div>
-              </th>
-              <th class="border-l-0.5 border-t-0.25 border-opacity-40">
-                <section class="mx-2 my-2">
-                  <div class="flex items-center justify-between">
+            <tbody class="mr-5 pr-5">
+              <tr v-for="(round, roundIndex) in gameState" :key="roundIndex">
+                <td
+                  class="px-2 border-t-0.25 border-r-0.5 border-opacity-40 text-silver"
+                  :class="{
+                    'border-b-0.25': roundIndex !== gameState.length - 1,
+                    '!text-yellow': determineRoundResult(roundIndex) === 'goodWins',
+                    '!text-red-700': determineRoundResult(roundIndex) === 'badWins',
+                  }"
+                >
+                  R{{ roundIndex + 1 }}
+                </td>
+                <th
+                  v-for="(player, playerIndex) in round"
+                  :key="roundIndex + playerIndex"
+                  class="border-opacity-40"
+                  :class="[
+                    roundIndex === gameState.length - 1
+                      ? 'border-t-0.25 border-l-0.25 border-r-0.25'
+                      : 'border-0.25',
+                  ]"
+                >
+                  <div class="flex">
                     <SVGBase
-                      :svg-content="tickIcon"
-                      class="mr-2 fill-yellow w-5 stroke-[1rem] stroke-yellow"
+                      :svg-content="crownIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.leader }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'leader')"
                     />
                     <SVGBase
-                      :svg-content="plusIcon"
-                      class="fill-silver w-4 clickable"
-                      :class="{
-                        'pointer-events-none opacity-50': isReachRoundLimit(roundIndex),
-                      }"
-                      @click.native="handleClickRoundState(roundIndex, 'good', 1)"
+                      :svg-content="shieldIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.mission }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'mission')"
                     />
-                    <span class="mx-1">{{ roundResultState[roundIndex].good }}</span>
                     <SVGBase
-                      :svg-content="minusIcon"
-                      class="fill-silver w-4 clickable"
-                      :class="{
-                        'pointer-events-none opacity-50': roundResultState[roundIndex].good === 0,
-                      }"
-                      @click.native="handleClickRoundState(roundIndex, 'good', -1)"
+                      :svg-content="fireIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.fire }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'fire')"
                     />
                   </div>
-                  <div class="flex items-center justify-between my-1">
+                  <div
+                    class="flex"
+                    v-if="gamePlayOption.enableWaterRounds.includes(roundIndex + 1)"
+                  >
                     <SVGBase
-                      :svg-content="cancelIcon"
-                      class="mr-2 fill-red-700 w-5 stroke-[0.5rem] stroke-red-700"
+                      :svg-content="gemIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.water }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'water')"
                     />
                     <SVGBase
-                      :svg-content="plusIcon"
-                      class="fill-silver w-4 clickable"
-                      :class="{
-                        'pointer-events-none opacity-50': isReachRoundLimit(roundIndex),
-                      }"
-                      @click.native="handleClickRoundState(roundIndex, 'bad', 1)"
+                      :svg-content="smileIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.waterV }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'waterV')"
                     />
-                    <span class="mx-1">{{ roundResultState[roundIndex].bad }}</span>
                     <SVGBase
-                      :svg-content="minusIcon"
-                      class="fill-silver w-4 clickable"
-                      :class="{
-                        'pointer-events-none opacity-50': roundResultState[roundIndex].bad === 0,
-                      }"
-                      @click.native="handleClickRoundState(roundIndex, 'bad', -1)"
+                      :svg-content="evilIcon"
+                      class="w-8 mx-1 my-1 clickable"
+                      :class="{ 'opacity-20': !player.waterX }"
+                      @click.native="handleClickSymbol(roundIndex, playerIndex, 'waterX')"
                     />
                   </div>
-                </section>
-              </th>
-            </tr>
-          </tbody>
-        </table>
+                </th>
+                <th class="border-l-0.5 border-t-0.25 border-opacity-40">
+                  <section class="mx-2 my-2" :class="{ flex: isRotate }">
+                    <div class="flex items-center justify-between" :class="{ 'mr-2': isRotate }">
+                      <SVGBase
+                        :svg-content="tickIcon"
+                        class="mr-2 fill-yellow w-5 stroke-[1rem] stroke-yellow"
+                      />
+                      <SVGBase
+                        :svg-content="plusIcon"
+                        class="fill-silver w-4 clickable"
+                        :class="{
+                          'pointer-events-none opacity-50': isReachRoundLimit(roundIndex),
+                        }"
+                        @click.native="handleClickRoundState(roundIndex, 'good', 1)"
+                      />
+                      <span class="mx-1">{{ roundResultState[roundIndex].good }}</span>
+                      <SVGBase
+                        :svg-content="minusIcon"
+                        class="fill-silver w-4 clickable"
+                        :class="{
+                          'pointer-events-none opacity-50': roundResultState[roundIndex].good === 0,
+                        }"
+                        @click.native="handleClickRoundState(roundIndex, 'good', -1)"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between my-1">
+                      <SVGBase
+                        :svg-content="cancelIcon"
+                        class="mr-2 fill-red-700 w-5 stroke-[0.5rem] stroke-red-700"
+                      />
+                      <SVGBase
+                        :svg-content="plusIcon"
+                        class="fill-silver w-4 clickable"
+                        :class="{
+                          'pointer-events-none opacity-50': isReachRoundLimit(roundIndex),
+                        }"
+                        @click.native="handleClickRoundState(roundIndex, 'bad', 1)"
+                      />
+                      <span class="mx-1">{{ roundResultState[roundIndex].bad }}</span>
+                      <SVGBase
+                        :svg-content="minusIcon"
+                        class="fill-silver w-4 clickable"
+                        :class="{
+                          'pointer-events-none opacity-50': roundResultState[roundIndex].bad === 0,
+                        }"
+                        @click.native="handleClickRoundState(roundIndex, 'bad', -1)"
+                      />
+                    </div>
+                  </section>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </section>
       </main>
     </client-only>
   </div>
@@ -224,10 +240,12 @@ import {
   minusIcon,
   cancelIcon,
   tickIcon,
+  rotateClockwiseIcon,
+  rotateAnticlockwiseIcon,
 } from '~/assets/icons'
 import { editBtn } from '~/assets/buttons'
 import { addOrRemove } from '~/components/helper/array'
-import { performClientTimeoutFunction } from '~/components/helper/performClientTimeoutFunction'
+import { performClientTimeoutFunction } from '~/components/helper/clientFunctions'
 
 type SymbolType = 'leader' | 'mission' | 'fire' | 'water' | 'waterV' | 'waterX'
 type ResultType = 'good' | 'bad'
@@ -266,6 +284,7 @@ export default defineComponent({
 
     /* display */
     const isClientReady = ref<boolean>(false)
+    const isRotate = ref<boolean>(false)
     const rounds = computed(() =>
       Array.from({ length: unref(missionNumbers)?.length ?? 0 }, (_, i) => i + 1),
     )
@@ -425,6 +444,7 @@ export default defineComponent({
       missionNumbers,
       // display
       isClientReady,
+      isRotate,
       questGamePlayOptions,
       rounds,
       players,
@@ -445,6 +465,8 @@ export default defineComponent({
       minusIcon,
       cancelIcon,
       tickIcon,
+      rotateAnticlockwiseIcon,
+      rotateClockwiseIcon,
       // control
       handleChangeGamePlayOption,
       handleClickReset: setGame,
@@ -457,4 +479,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.rotate {
+  position: absolute;
+  transform-origin: top left;
+  transform: rotate(90deg) translateX(0rem) translateY(-100%);
+  overflow: visible;
+}
+</style>

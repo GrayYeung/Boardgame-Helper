@@ -77,7 +77,7 @@ import DropDownWrap from '~/components/input/DropDownWrap.vue'
 import Header from '~/components/Header.vue'
 import SVGBase from '~/components/SVGBase.vue'
 import { MenuItem, menuList, pluginList } from '~/components/model/MenuItem'
-import { performClientTimeoutFunction } from '~/components/helper/performClientTimeoutFunction'
+import { performClientTimeoutFunction } from '~/components/helper/clientFunctions'
 
 export default defineComponent({
   name: 'Setting',
