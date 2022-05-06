@@ -2,30 +2,34 @@
   <div class="child-page-container flex flex-col">
     <Header class="flex-initial" title="Wordle" />
 
-    <main class="flex-auto mt-20 pb-20 px-4">
+    <main class="flex-auto mt-20 pb-20 px-4 flex flex-col space-y-4">
       <!-- config -->
-      <ToggleDisplay title="Config" class="my-4 text-silver">
-        <div class="flex items-center justify-between pt-2 pb-1 ml-5 text-black dark:text-white">
-          <h3 class="text-1 leading-none">Quiz Mode</h3>
-          <BooleanSwitch :value="enableQuiz" @click="enableQuiz = !enableQuiz" />
-        </div>
-        <div class="flex items-center justify-between ml-5 text-black dark:text-white">
-          <h3 class="text-1 leading-none">Show Hints</h3>
-          <BooleanSwitch :value="enableHint" @click="enableHint = !enableHint" />
+      <ToggleDisplay title="Config" class="mt-4 text-silver">
+        <div id="configs-container" class="pt-2 ml-5 flex flex-col space-y-1">
+          <div class="flex items-center justify-between text-black dark:text-white">
+            <h3 class="text-1 leading-none">Quiz Mode</h3>
+            <BooleanSwitch :value="enableQuiz" @click="enableQuiz = !enableQuiz" />
+          </div>
+          <div class="flex items-center justify-between text-black dark:text-white">
+            <h3 class="text-1 leading-none">Show Hints</h3>
+            <BooleanSwitch :value="enableHint" @click="enableHint = !enableHint" />
+          </div>
         </div>
       </ToggleDisplay>
 
+      <SemiDivider class="flex-shrink-0" v-if="enableQuiz" />
+
       <!-- quiz -->
-      <section class="my-4" v-if="enableQuiz">
-        <SemiDivider class="my-4" />
-        <div class="flex my-2">
-          <h2 class="text-gold mr-2"><strong>Quiz Section:</strong></h2>
+      <section v-if="enableQuiz" aria-labelledby="quiz-title">
+        <div class="flex mb-2">
+          <h2 id="quiz-title" class="text-gold mr-2"><strong>Quiz Section:</strong></h2>
           <transition appear name="fade-in-out">
-            <div v-if="quizAnswer.length" class="flex">
+            <div v-if="quizAnswer.length" id="quiz-boxes-container" class="flex space-x-1">
               <div
                 v-for="(char, charIndex) in quizAnswer"
                 :key="charIndex"
-                class="rounded-md border-0.25 w-6 h-6 mr-1 flex justify-center items-center"
+                :id="`quiz-box-container-${charIndex}`"
+                class="rounded-md border-0.25 w-6 h-6 flex justify-center items-center"
               >
                 <p
                   class="text-1 text-center inline leading-none"
@@ -37,58 +41,68 @@
             </div>
           </transition>
         </div>
-        <div class="flex my-2">
+        <!-- button groups -->
+        <div id="quiz-buttons-group" class="flex space-x-2">
           <TextButton
-            class="mr-2 nt:hover:bg-gold"
+            class="nt:hover:bg-gold"
             title="Start"
             :handle-click="handleStartQuiz"
             :show-loading="isLoadingQuiz"
           />
           <TextButton
-            class="mr-2 nt:hover:bg-gold"
+            class="nt:hover:bg-gold"
             title="Show"
             :handle-click="handleShowQuiz"
             :is-disable="isShowQuiz || !quizAnswer.length"
           />
-          <TextButton class="mr-2 nt:hover:bg-gold" title="Reset" :handle-click="handleResetQuiz" />
+          <TextButton class="nt:hover:bg-gold" title="Reset" :handle-click="handleResetQuiz" />
         </div>
       </section>
 
+      <SemiDivider class="flex-shrink-0" />
+
       <!-- inputted words -->
-      <section class="mt-4">
-        <SemiDivider class="my-4" />
+      <section title="inputted words" class="flex flex-col space-y-2">
         <h2 v-if="!hasInput">Try 'Show' or input words</h2>
-        <div v-for="(word, wordIndex) in inputtedWordObj" :key="wordIndex" class="flex my-2">
+        <div
+          v-for="(word, wordIndex) in inputtedWordObj"
+          :key="wordIndex"
+          :id="`input-word-group-${wordIndex}`"
+          class="flex"
+        >
           <p class="min-w-7 mr-2">{{ getOrdinalSuffixOf(wordIndex + 1) }}</p>
-          <div
-            v-for="(char, charIndex) in word.word"
-            :key="charIndex + char"
-            @click="handleChangeStatus(wordIndex, charIndex)"
-            @click.right="handleChangeStatusRevise(wordIndex, charIndex)"
-            class="rounded-md border-0.25 w-6 h-6 mr-1 flex justify-center items-center clickable"
-            :class="{ 'pointer-events-none': isQuizMode }"
-          >
-            <p
-              class="text-1 text-center inline leading-none"
-              :class="{
-                'text-yellow': char.status === 'YELLOW',
-                'text-green-600': char.status === 'GREEN',
-                'text-grey-250': char.status === 'GREY',
-              }"
+          <div :id="`input-word-container-${wordIndex}`" class="flex space-x-1">
+            <div
+              v-for="(char, charIndex) in word.word"
+              :key="charIndex + char"
+              @click="handleChangeStatus(wordIndex, charIndex)"
+              @click.right="handleChangeStatusRevise(wordIndex, charIndex)"
+              :id="`input-char-container-${wordIndex}-${charIndex}`"
+              class="rounded-md border-0.25 w-6 h-6 flex justify-center items-center clickable"
+              :class="{ 'pointer-events-none': isQuizMode }"
             >
-              {{ char.char.toUpperCase() }}
-            </p>
+              <p
+                class="text-1 text-center inline leading-none"
+                :class="{
+                  'text-yellow': char.status === 'YELLOW',
+                  'text-green-600': char.status === 'GREEN',
+                  'text-grey-250': char.status === 'GREY',
+                }"
+              >
+                {{ char.char.toUpperCase() }}
+              </p>
+            </div>
           </div>
-          <button @click="handleRemoveWord(wordIndex)">
+          <button class="ml-1" @click="handleRemoveWord(wordIndex)">
             <SVGBase :svg-content="cancelIcon" class="ml-1 w-3 fill-gold" />
           </button>
         </div>
       </section>
 
-      <SemiDivider class="my-4" />
+      <SemiDivider class="flex-shrink-0" />
 
       <!-- input -->
-      <section class="flex my-2">
+      <section class="flex my-2" title="input control">
         <input
           type="text"
           :maxlength="5"
@@ -106,43 +120,51 @@
         <TextButton class="mr-2 nt:hover:bg-gold" title="Clear" :handle-click="handleClear" />
       </section>
 
+      <SemiDivider v-if="!isInit && enableHint" class="flex-shrink-0" />
+
       <!-- suggestions -->
-      <section v-if="!isInit && enableHint">
-        <SemiDivider class="my-4" />
+      <section v-if="!isInit && enableHint" title="suggestions">
         <h2 v-if="!hasSuggestions">No suggestions</h2>
-        <div v-else>
-          <h2 class="text-gold mb-2">
-            <strong>Suggestions:</strong>
-          </h2>
-          <div class="flex mb-2">
+        <div v-else class="flex flex-col space-y-2">
+          <h2 class="text-gold"><strong>Suggestions:</strong></h2>
+          <div class="flex">
             <h3 class="text-gold mr-2">vowels:</h3>
-            <p
-              v-for="vowel in ['a', 'e', 'i', 'o', 'u']"
-              :key="vowel"
-              class="mx-1"
-              :class="{ 'line-through text-gray-500': inputtedWordsFlattenChars.includes(vowel) }"
-            >
-              {{ vowel }}
-            </p>
-          </div>
-          <div v-for="group in suggestionsGroup" :key="group[0]" class="flex">
-            <p class="w-6 mr-6 text-gold">{{ group[0] }} :</p>
-            <div
-              class="flex-auto grid grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-x-4 auto-rows-min"
-            >
+            <div id="vowels-container" class="flex space-x-1">
               <p
-                v-for="suggestion in group[1]"
-                :key="suggestion"
-                class="clickable"
-                :class="{
-                  '!text-yellow': isMostFrequent(suggestion).value,
-                  'text-gray-500': hasDuplicatedChar(suggestion),
-                }"
-                @click="handleClickSuggestion(suggestion)"
+                v-for="vowel in ['a', 'e', 'i', 'o', 'u']"
+                :key="vowel"
+                :class="{ 'line-through text-gray-500': inputtedWordsFlattenChars.includes(vowel) }"
               >
-                {{ suggestion }}
-                <!--                {{ suggestion + ' ' + isMostFrequent(suggestion).value.toString().charAt(0) }}-->
+                {{ vowel }}
               </p>
+            </div>
+          </div>
+          <div id="suggestions-group">
+            <div
+              v-for="group in suggestionsGroup"
+              :key="group[0]"
+              :id="`suggestion-group-${group[0]}`"
+              class="flex"
+            >
+              <p class="w-6 mr-6 text-gold">{{ group[0] }} :</p>
+              <div
+                :id="`suggestions-${group[0]}`"
+                class="flex-auto grid grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-x-4 auto-rows-min"
+              >
+                <p
+                  v-for="suggestion in group[1]"
+                  :key="suggestion"
+                  class="clickable"
+                  :class="{
+                    '!text-yellow': isMostFrequent(suggestion).value,
+                    'text-gray-500': hasDuplicatedChar(suggestion),
+                  }"
+                  @click="handleClickSuggestion(suggestion)"
+                >
+                  {{ suggestion }}
+                  <!--                {{ suggestion + ' ' + isMostFrequent(suggestion).value.toString().charAt(0) }}-->
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -236,7 +258,7 @@ export default defineComponent({
       })
       return _.countBy(flattenCharArr)
     })
-    const count = ref(0)
+    const count = ref(0) // frequent word counter
     const isMostFrequent = (word: string) =>
       computed(() => {
         if (unref(suggestions).length >= baseNumber) return false
