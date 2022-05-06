@@ -38,8 +38,8 @@
         <SemiDivider class="my-4" />
 
         <!-- buttons -->
-        <section class="my-4 flex">
-          <TextButton class="mr-2 nt:hover:bg-gold" title="重設" :handle-click="handleClickReset" />
+        <section class="my-4 flex space-x-2" title="button groups">
+          <TextButton class="nt:hover:bg-gold" title="重設" :handle-click="handleClickReset" />
           <TextButton
             class="nt:hover:bg-gold"
             :title="isRotate ? '復原' : '旋轉'"
@@ -49,7 +49,7 @@
         </section>
 
         <!-- game board -->
-        <section :class="{ relative: isRotate }">
+        <section :class="{ relative: isRotate }" title="game board">
           <table :class="{ rotate: isRotate }">
             <caption class="text-left mb-1 pl-1">進度：</caption>
 
@@ -61,7 +61,10 @@
                   :key="playerIndex"
                   class="pb-2 text-gold border-r-0.25 border-l-0.25 border-b-0.5 border-opacity-40"
                 >
-                  <section class="flex items-center justify-between max-w-32">
+                  <div
+                    id="player-name-container"
+                    class="flex items-center justify-between max-w-32"
+                  >
                     <div class="flex-1 min-w-5" />
                     <input
                       v-if="onEditPlayers.includes(playerIndex)"
@@ -85,7 +88,7 @@
                         "
                       />
                     </div>
-                  </section>
+                  </div>
                 </th>
                 <th class="pb-2 px-2 text-gold border-l-0.5 border-b-0.5 border-opacity-40">
                   結果
@@ -115,7 +118,7 @@
                       : 'border-0.25',
                   ]"
                 >
-                  <div class="flex">
+                  <div id="game-symbol-container" class="flex">
                     <SVGBase
                       :svg-content="crownIcon"
                       class="w-8 mx-1 my-1 clickable"
@@ -136,6 +139,7 @@
                     />
                   </div>
                   <div
+                    id="optional-game-symbol-container"
                     class="flex"
                     v-if="gamePlayOption.enableWaterRounds.includes(roundIndex + 1)"
                   >
@@ -160,11 +164,15 @@
                   </div>
                 </th>
                 <th class="border-l-0.5 border-t-0.25 border-opacity-40">
-                  <section class="mx-2 my-2" :class="{ flex: isRotate }">
-                    <div class="flex items-center justify-between" :class="{ 'mr-2': isRotate }">
+                  <div id="result-container" class="mx-2 my-2" :class="{ flex: isRotate }">
+                    <div
+                      id="good-counter-container"
+                      class="flex space-x-1 items-center justify-between"
+                      :class="{ 'mr-2': isRotate }"
+                    >
                       <SVGBase
                         :svg-content="tickIcon"
-                        class="mr-2 fill-yellow w-5 stroke-[1rem] stroke-yellow"
+                        class="mr-1 fill-yellow w-5 stroke-[1rem] stroke-yellow"
                       />
                       <SVGBase
                         :svg-content="plusIcon"
@@ -174,7 +182,7 @@
                         }"
                         @click.native="handleClickRoundState(roundIndex, 'good', 1)"
                       />
-                      <span class="mx-1">{{ roundResultState[roundIndex].good }}</span>
+                      <span>{{ roundResultState[roundIndex].good }}</span>
                       <SVGBase
                         :svg-content="minusIcon"
                         class="fill-silver w-4 clickable"
@@ -184,10 +192,13 @@
                         @click.native="handleClickRoundState(roundIndex, 'good', -1)"
                       />
                     </div>
-                    <div class="flex items-center justify-between my-1">
+                    <div
+                      id="bad-counter-container"
+                      class="flex space-x-1 items-center justify-between my-1"
+                    >
                       <SVGBase
                         :svg-content="cancelIcon"
-                        class="mr-2 fill-red-700 w-5 stroke-[0.5rem] stroke-red-700"
+                        class="mr-1 fill-red-700 w-5 stroke-[0.5rem] stroke-red-700"
                       />
                       <SVGBase
                         :svg-content="plusIcon"
@@ -197,7 +208,7 @@
                         }"
                         @click.native="handleClickRoundState(roundIndex, 'bad', 1)"
                       />
-                      <span class="mx-1">{{ roundResultState[roundIndex].bad }}</span>
+                      <span>{{ roundResultState[roundIndex].bad }}</span>
                       <SVGBase
                         :svg-content="minusIcon"
                         class="fill-silver w-4 clickable"
@@ -207,7 +218,7 @@
                         @click.native="handleClickRoundState(roundIndex, 'bad', -1)"
                       />
                     </div>
-                  </section>
+                  </div>
                 </th>
               </tr>
             </tbody>

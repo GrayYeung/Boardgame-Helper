@@ -91,6 +91,7 @@ module.exports = {
         0.75: '0.75rem',
         '0.75-normal': ['0.75rem', { lineHeight: 'normal' }],
         0.8: '0.8rem',
+        0.9: '0.9rem',
         1: '1rem',
         1.25: '1.25rem',
         1.67: ['0.75rem', { lineHeight: '1.67' }],

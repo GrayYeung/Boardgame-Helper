@@ -3,23 +3,21 @@
     <div
       class="fixed md:static top-0 rounded-tr-4 rounded-br-4 md:rounded-none bg-beige-100 dark:bg-grey-600 shadow max-w-71 w-full h-full md:h-screen z-40 flex flex-col"
     >
-      <div class="mt-24">
+      <div id="menu-item-container" class="mt-24 flex flex-col space-y-4">
         <button
           v-for="item in normalizedMenuList"
           :key="item.name"
-          class="pl-10 h-9 w-full flex items-center mb-4"
+          class="pl-10 h-9 w-full flex items-center text-1 leading-tight"
           :class="{ 'bg-beige-400 dark:bg-grey-300 text-gold': isSelected(item.name).value }"
           @click="handleClickItem(item.name)"
         >
-          <span class="flex items-center text-1 leading-tight">
-            <SVGBase
-              :svg-content="item.img"
-              class="mr-6 w-[1em]"
-              :class="isSelected(item.name).value ? 'fill-gold' : 'fill-current'"
-            />
-            <span :class="isSelected(item.name).value ? 'font-bold-set' : 'font-0spacing-set'">
-              {{ item.title }}
-            </span>
+          <SVGBase
+            :svg-content="item.img"
+            class="mr-6 w-[1em]"
+            :class="isSelected(item.name).value ? 'fill-gold' : 'fill-current'"
+          />
+          <span :class="isSelected(item.name).value ? 'font-bold-set' : 'font-0spacing-set'">
+            {{ item.title }}
           </span>
         </button>
       </div>
