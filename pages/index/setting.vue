@@ -2,9 +2,9 @@
   <div class="child-page-container flex flex-col">
     <Header class="flex-initial" title="設定" />
 
-    <main class="flex-auto mt-20 pb-20 px-4 flex flex-col space-y-4">
+    <main class="flex-auto mt-20 pt-4 pb-20 px-4 flex flex-col space-y-4">
       <client-only>
-        <section class="mt-4" aria-labelledby="color-mode-title">
+        <section aria-labelledby="color-mode-title">
           <div class="flex items-center justify-between">
             <h2 id="color-mode-title" class="text-1 leading-none">顏色模式</h2>
             <DropDownWrap>

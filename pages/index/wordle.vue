@@ -2,9 +2,9 @@
   <div class="child-page-container flex flex-col">
     <Header class="flex-initial" title="Wordle" />
 
-    <main class="flex-auto mt-20 pb-20 px-4 flex flex-col space-y-4">
+    <main class="flex-auto mt-20 pt-4 pb-20 px-4 flex flex-col space-y-4">
       <!-- config -->
-      <ToggleDisplay title="Config" class="mt-4 text-silver">
+      <ToggleDisplay title="Config" class="text-silver">
         <div id="configs-container" class="pt-2 ml-5 flex flex-col space-y-1">
           <div class="flex items-center justify-between text-black dark:text-white">
             <h3 class="text-1 leading-none">Quiz Mode</h3>

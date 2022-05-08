@@ -3,9 +3,9 @@
     <Header class="flex-initial" title="亞瑟傳奇" />
 
     <client-only>
-      <main class="flex-auto mt-20 pb-20 px-4" v-if="isClientReady">
+      <main class="flex-auto mt-20 pt-4 pb-20 px-4" v-if="isClientReady">
         <!-- config -->
-        <ToggleDisplay title="設置" class="my-4 text-silver">
+        <ToggleDisplay title="設置" class="text-silver">
           <div class="flex items-center justify-between pt-2 pb-1 ml-5 text-black dark:text-white">
             <h2 class="text-1 leading-none">遊戲模式</h2>
             <DropDownWrap>
