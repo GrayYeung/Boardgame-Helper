@@ -1,9 +1,15 @@
 <template>
   <transition appear name="slide-fade">
     <div
-      class="fixed md:static top-0 rounded-tr-4 rounded-br-4 md:rounded-none bg-beige-100 dark:bg-grey-600 shadow max-w-71 w-full h-full md:h-screen z-40 flex flex-col"
+      class="fixed pt-24 md:static top-0 rounded-tr-4 rounded-br-4 md:rounded-none bg-beige-100 dark:bg-grey-600 shadow max-w-71 w-full h-full md:h-screen z-40 flex flex-col"
     >
-      <div id="menu-item-container" class="mt-24 flex flex-col space-y-4">
+      <transition-group
+        appear
+        name="fade-in-out"
+        tag="div"
+        id="menu-item-container"
+        class="flex flex-col space-y-4"
+      >
         <button
           v-for="item in normalizedMenuList"
           :key="item.name"
@@ -20,7 +26,7 @@
             {{ item.title }}
           </span>
         </button>
-      </div>
+      </transition-group>
 
       <div class="pl-10 mt-auto mb-14 flex">
         <p class="text-1 leading-0.88 font-0spacing-set">v{{ appVersion }}</p>
@@ -76,7 +82,7 @@ export default defineComponent({
         return isActive ? plugin : []
       }),
     )
-    const normalizedMenuList = computed(() => [...menuList, ...unref(normalizedPluginList)])
+    const normalizedMenuList = computed(() => [...unref(normalizedPluginList), ...menuList])
     const handleClickItem = (name: string) => {
       if (!isSelected(name).value) {
         router.push({ name })
@@ -100,6 +106,7 @@ export default defineComponent({
   box-shadow: 0.13rem 0 0.25rem 0 rgba(0, 0, 0, 0.5);
 }
 
+/* menu */
 .slide-fade-enter {
   opacity: 0.8;
   transform: translateX(-60%);
@@ -111,5 +118,21 @@ export default defineComponent({
 
 .slide-fade-enter-active {
   transition: all 0.5s ease;
+}
+
+/* menu item */
+.fade-in-out-leave,
+.fade-in-out-enter-to {
+  opacity: 1;
+}
+
+.fade-in-out-leave-to,
+.fade-in-out-enter {
+  opacity: 0;
+}
+
+.fade-in-out-leave-active,
+.fade-in-out-enter-active {
+  transition: all 0.2s ease-out;
 }
 </style>
