@@ -29,4 +29,10 @@ export const pluginList: MenuItem[] = [
     img: packageIcon,
     type: 'plugin',
   },
+  {
+    title: '拉斯維加斯',
+    name: 'index-las-vegas',
+    img: packageIcon,
+    type: 'plugin',
+  },
 ]

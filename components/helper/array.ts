@@ -5,6 +5,10 @@ export const shuffleArray = <T>(array: T[]): T[] => {
   return shuffle(array)
 }
 
+export const getRandomItemFromArray = <T>(array: T[]): T => {
+  return shuffleArray(array)[0]
+}
+
 export function addOrRemove<T>(arr: T[], value: T): T[] {
   let result: T[]
   if (includes(arr, value)) {
