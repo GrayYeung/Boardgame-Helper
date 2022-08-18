@@ -11,4 +11,4 @@ The purpose of this website is to make the process of playing actual boardgames 
 - [x] Wordle
 - [x] 亞瑟傳奇
 - [ ] 熊熊公園
-- [ ] 拉斯維加斯
+- [x] 拉斯維加斯
